@@ -3,3 +3,4 @@ testEdt
 *.pyc
 static/edt.xls
 static/edt.csv
+*.swp

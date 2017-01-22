@@ -42,16 +42,40 @@ def getPlayers():
 
 @app.route("/")
 def hello():
-  images = []
-  for root, dirs, files in os.walk('/var/www/myServ/FlaskApp/static/monsterApoPict/'):
-    for filename in files:
-      images.append({'src' : os.path.join("/static/monsterApoPict/",filename)})
+
+  #images = []
+  #for root, dirs, files in os.walk('/var/www/myServ/FlaskApp/static/monsterApoPict/'):
+  #  for filename in files:
+  #    images.append({'src' : os.path.join("/static/monsterApoPict/",filename)})
+
+  #Listing all articles directory
+  artDir = '/var/www/myServ/FlaskApp/static/articles'
+  artList = [[os.path.join(artDir,o),o] for o in os.listdir(artDir) if os.path.isdir(os.path.join(artDir,o))]
+  
+  #Filling the data for each article
+  articlesData = []
+  for article in artList:
+    artData = dict()
+    csvFile = open(os.path.join(article[0],"article.csv"))
+    reader = csv.reader(csvFile,delimiter=',')
+    csvList = [row for row in reader]
+    artData['title'] = csvList[0][0]
+    artData['link'] = csvList[1][0]
+    artData['description'] = unicode(csvList[2][0],'utf-8')
+    imgPath = os.path.join(article[0],"images")
+    imgList = []
+    for root, dirs, files in os.walk(imgPath):
+      for img in files:
+        imgList.append({'src' : os.path.join('/static/articles',article[1],'images',img)})
+    artData['images'] = imgList
+    articlesData.append(artData)
+
   listPlayers = []
   with open('/var/www/myServ/FlaskApp/static/listPlayers.txt','r') as csvfile:
     reader = csv.reader(csvfile,delimiter = ' ')
     for row in reader:
       listPlayers.append({'name' : row[0]})
-  return render_template('index.html', **{'images' : images, 'players' : listPlayers, 'nbPlayers' : len(listPlayers)})
+  return render_template('index.html', **{'articles' : articlesData, 'players' : listPlayers, 'nbPlayers' : len(listPlayers)})
 
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)
