@@ -4,3 +4,4 @@ testEdt
 static/edt.xls
 static/edt.csv
 *.swp
+static/listPlayers.txt
