@@ -59,7 +59,7 @@ def hello():
     csvFile = open(os.path.join(article[0],"article.csv"))
     reader = csv.reader(csvFile,delimiter=',')
     csvList = [row for row in reader]
-    artData['title'] = csvList[0][0]
+    artData['title'] = unicode(csvList[0][0],'utf-8')
     artData['link'] = csvList[1][0]
     artData['description'] = unicode(csvList[2][0],'utf-8')
     imgPath = os.path.join(article[0],"images")
