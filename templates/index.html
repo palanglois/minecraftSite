@@ -78,16 +78,27 @@
         <div class="col s13 center">
           <h3><i class="mdi-content-send brown-text"></i></h3>
           <h4>Nous avons testé</h4>
-	  <h5>Monster Apocalypse (Version 16.7)</h5>
-          <h6><a href="https://www.spigotmc.org/resources/monster-apocalypse.12122/" target="_blank">Lien</a></h6>
-          <p class="center-align light">Les montres sont plus nombreux et peuvent : repérer les joueurs où qu'ils soient, détruire et poser des blocs pour les atteindre. Optez pour des remparts de lave et des constructions en altitude.</p>
+
+    	    <h5>Monster Apocalypse (Version 16.7)</h5>
+            <h6><a href="https://www.spigotmc.org/resources/monster-apocalypse.12122/" target="_blank">Lien</a></h6>
+            <p class="center-align light">Les montres sont plus nombreux et peuvent : repérer les joueurs où qu'ils soient, détruire et poser des blocs pour les atteindre. Optez pour des remparts de lave et des constructions en altitude.</p>
+            <div id="imagesIllustration">
+              {%for image in images%}
+              <div class="imageIllustration"><img src={{image.src}} /></div>
+              {%endfor%}
+            </div>
+
+  	    <h5>Monster Apocalypse (Version 16.7)</h5>
+            <h6><a href="https://www.spigotmc.org/resources/monster-apocalypse.12122/" target="_blank">Lien</a></h6>
+            <p class="center-align light">Les montres sont plus nombreux et peuvent : repérer les joueurs où qu'ils soient, détruire et poser des blocs pour les atteindre. Optez pour des remparts de lave et des constructions en altitude.</p>
+            <div id="imagesIllustration">
+              {%for image in images%}
+              <div class="imageIllustration"><img src={{image.src}} /></div>
+              {%endfor%}
+            </div>
+        
         </div>
       </div>
-        <div id="imagesIllustration">
-          {%for image in images%}
-          <div class="imageIllustration"><img src={{image.src}} /></div>
-          {%endfor%}
-        </div>
 
     </div>
   </div>
