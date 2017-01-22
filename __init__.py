@@ -57,7 +57,7 @@ def hello():
   for article in artList:
     artData = dict()
     csvFile = open(os.path.join(article[0],"article.csv"))
-    reader = csv.reader(csvFile,delimiter='/')
+    reader = csv.reader(csvFile,delimiter='\\')
     csvList = [row for row in reader]
     artData['title'] = unicode(csvList[0][0],'utf-8')
     artData['link'] = csvList[1][0]
@@ -78,4 +78,4 @@ def hello():
   return render_template('index.html', **{'articles' : articlesData, 'players' : listPlayers, 'nbPlayers' : len(listPlayers)})
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run()
