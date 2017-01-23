@@ -64,13 +64,8 @@ def hello():
         imgList.append({'src' : os.path.join('/static/articles',article[1],'images',img)})
     artData['images'] = imgList
     articlesData.append(artData)
-
-  listPlayers = []
-  with open('/var/www/myServ/FlaskApp/static/listPlayers.txt','r') as csvfile:
-    reader = csv.reader(csvfile,delimiter = ' ')
-    for row in reader:
-      listPlayers.append({'name' : row[0]})
-  return render_template('index.html', **{'articles' : articlesData, 'players' : listPlayers, 'nbPlayers' : len(listPlayers)})
+  #Rendering the page
+  return render_template('index.html', **{'articles' : articlesData})
 
 if __name__ == "__main__":
   app.run()
