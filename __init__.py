@@ -42,12 +42,6 @@ def getPlayers():
 
 @app.route("/")
 def hello():
-
-  #images = []
-  #for root, dirs, files in os.walk('/var/www/myServ/FlaskApp/static/monsterApoPict/'):
-  #  for filename in files:
-  #    images.append({'src' : os.path.join("/static/monsterApoPict/",filename)})
-
   #Listing all articles directory
   artDir = '/var/www/myServ/FlaskApp/static/articles'
   artList = [[os.path.join(artDir,o),o] for o in os.listdir(artDir) if os.path.isdir(os.path.join(artDir,o))]
@@ -62,6 +56,7 @@ def hello():
     artData['title'] = unicode(csvList[0][0],'utf-8')
     artData['link'] = csvList[1][0]
     artData['description'] = unicode(csvList[2][0],'utf-8')
+    #Filling the images path
     imgPath = os.path.join(article[0],"images")
     imgList = []
     for root, dirs, files in os.walk(imgPath):
