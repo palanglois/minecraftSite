@@ -1,5 +1,12 @@
 function reloadPlayers(){
-  $( "#onlinePlayers" ).load( "onlineplayers" );
+  $( "#onlinePlayers" ).load( "onlineplayers",
+    function(data)
+    {
+      var obj = JSON.parse(data);
+      $("#onlinePlayers").html(obj.section);
+      $(".nbPlayers").each(function(){$(this).text(obj.nb)});
+    }
+);
 }
 
 reloadPlayers();

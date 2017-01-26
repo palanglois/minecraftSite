@@ -3,6 +3,7 @@ from flask import Flask, render_template_string, render_template, send_from_dire
 import os
 import csv
 import sys
+import json
 from readEdt import *
 
 app = Flask(__name__)
@@ -38,7 +39,10 @@ def getPlayers():
     reader = csv.reader(csvfile,delimiter = ' ')
     for row in reader:
       listPlayers.append({'name' : row[0]})
-    return render_template('onlinePlayers.html', **{'players' : listPlayers, 'nbPlayers' : len(listPlayers) })
+    data = {}
+    data['nb'] = len(listPlayers)
+    data['section'] = render_template('onlinePlayers.html', **{'players' : listPlayers, 'nbPlayers' : len(listPlayers) }).encode('utf-8')
+    return json.dumps(data)
 
 @app.route("/")
 def hello():
@@ -68,4 +72,4 @@ def hello():
   return render_template('index.html', **{'articles' : articlesData})
 
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)
