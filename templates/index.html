@@ -76,14 +76,19 @@
           <h4>Nous avons testé</h4>
 
             {%for article in articles%}
-    	    <h5>{{article.title}}</h5>
-            <h6><a href="{{article.link}}" target="_blank">Lien</a></h6>
-            <p class="center-align light">{{article.description}}</p>
-            <div id="imagesIllustration">
-              {%for image in article.images%}
-              <div class="imageIllustration"><img src={{image.src}} /></div>
-              {%endfor%}
-            </div>
+    	      <div class="article">
+                <h5>{{article.title}}</h5>
+                <h6><a href="{{article.link}}" target="_blank">Lien</a></h6>
+                <p class="center-align light">{{article.description}}</p>
+                <div id="imagesIllustration">
+                  {%for image in article.images%}
+                    <div class="imageIllustration"><img src={{image.src}} />
+                    </div>
+                  {%endfor%}
+                </div>
+                <div class="bottom-line">
+                </div>
+              </div>
             {%endfor%}
         
         </div>
