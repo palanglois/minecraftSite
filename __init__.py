@@ -32,6 +32,15 @@ def robots():
   robotsString = "<br>".join(robotsListString)
   return(send_from_directory('/var/www/myServ','robots.txt'))
 
+@app.route("/profile")
+def profile():
+  fakeProfile = dict()
+  fakeProfile["pseudo"] = "Fake_Profile" 
+  fakeProfile["date"] = "01.01.2001"
+  fakeProfile["email"] = "fake_email@gmail.com"
+  fakeProfile["profilePicture"] = "/static/steve.jpg"
+  return render_template('profile.html',**fakeProfile)
+
 @app.route("/onlineplayers")
 def getPlayers():
   listPlayers = []
@@ -72,4 +81,4 @@ def hello():
   return render_template('index.html', **{'articles' : articlesData})
 
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)

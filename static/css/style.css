@@ -49,6 +49,17 @@ a, a:visited {
     padding: 1%;
 }
 
+.profilePicture
+{
+    float:left;
+    max-width: 25%;
+}
+
+.profileTable
+{
+   display: inline;
+}
+
 .article
 {
    margin-bottom: 3%;  
@@ -62,6 +73,11 @@ a, a:visited {
     margin-left: 20%;
     margin-right: 20%;
     border-bottom: 1px solid #000000;
+}
+
+.profileDescription
+{
+  overflow: auto;
 }
 
 .button-collapse {
