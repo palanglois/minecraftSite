@@ -1,7 +1,8 @@
 # Lucien and Leon website
 
 Dependencies :
-* Flask 
+* Flask
+* flask-wtf : `sudo -H python -m pip install flask-wtf` 
 * gnumeric
 
 # How to develop
