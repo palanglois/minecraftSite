@@ -53,6 +53,13 @@ def parseEdt(identifier):
                 if c.decode('utf-8') in courseTitle.lower():
                   courseHour = data[innerIterator][dayColumn]
                   courseRoom = data[innerIterator + 3][dayColumn]
+
+                  # Fix for Laverne's mistakes
+                  if len(courseRoom) == 0:
+                    courseRoom = data[innerIterator + 4][dayColumn]
+                  if len(data[innerIterator + 2][dayColumn]) == 0:
+                    courseRoom = data[innerIterator + 4][dayColumn]
+
                   curTable = {'title' : courseTitle,
                               'hour'  : courseHour,
                               'room'  : courseRoom,
