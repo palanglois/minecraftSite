@@ -1,3 +1,5 @@
+import datetime
+
 def compare(item1,item2):
   date1 = item1['day']
   date2 = item2['day']
@@ -25,3 +27,11 @@ def compare(item1,item2):
     return -1
   return 0
 
+
+def compare2(item1, item2):
+  if item1['datetime'] > item2['datetime']:
+    return 1
+  elif item1['datetime'] < item2['datetime']:
+    return -1
+  else:
+    return 0

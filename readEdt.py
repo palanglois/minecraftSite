@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import csv
 import time
+import copy
 from cours import cours
 from sortList import *
+import dateparser
+from datetime import datetime
 
 #Parse the obtained csv file and get relevant courses for the person 'name'
 def getEdt(name):
@@ -13,27 +16,50 @@ def getEdt(name):
     for row in reader:
       temp = list(row)
       data.append([s.decode('utf-8') for s in temp])
-    print(len(data))
     semaineStr = ""
     dayLine = 0
-    for i in range(len(data)):
-      row = data[i]
-      if row[0][0:7] == 'Semaine':
+    lineIterator = 0
+    while lineIterator < len(data):
+      row = data[lineIterator]
+      if row[0][0:7].lower() == 'semaine':
         semaineStr = row[0]
-        #print('\n\n'+semaineStr+'\n\n')
-        dayLine = i+1
-      for j in range(len(row)):
-        cell = row[j]
-        for c in cours[name]:
-          day = data[dayLine][j]
-          if c.decode('utf-8') in cell.lower():
-            if len(day) == 10:
-              if int(day[5:7]) < int(time.strftime("%m")):
-                break
-              elif int(day[5:7]) == int(time.strftime("%m")) and int(day[8:10]) < int(time.strftime("%d")):
-                break
-            curTable = {'title' : cell,'hour' : data[i-1][j],'room' : data[i+2][j], 'day' : data[dayLine][j], 'week' : semaineStr}
-            myEdt.append(curTable)
+        dayLine = lineIterator + 1
+      else:
+        lineIterator += 1
+        continue
+      innerIterator = lineIterator + 2
+      while data[innerIterator][0][0:7].lower() != 'semaine':
+        lineData = "".join(data[innerIterator])
+        if not (lineData[0:2].isdigit() and lineData[2] == 'h'):
+          innerIterator += 1
+          if innerIterator >= len(data):
             break
-  return sorted(myEdt,cmp=compare)
+          continue
+        for dayColumn in range(5):
+          courseDayDate = dateparser.parse(data[dayLine][dayColumn])
+          if len(data[innerIterator][dayColumn]) >= 5:
+            if data[innerIterator][dayColumn][0:2].isdigit():
+              # Getting the course date
+              curCourseDate = copy.deepcopy(courseDayDate)
+              curCourseDate = curCourseDate.replace(hour=int(data[innerIterator][dayColumn][0:2]))
+              curCourseDate = curCourseDate.replace(minute=int(data[innerIterator][dayColumn][3:5]))
+              if curCourseDate < datetime.now().replace(hour=datetime.now().hour - 1):
+                continue
+              courseTitle = data[innerIterator + 1][dayColumn]
+              for c in cours[name]:
+                if c.decode('utf-8') in courseTitle.lower():
+                  courseHour = data[innerIterator][dayColumn]
+                  courseRoom = data[innerIterator + 3][dayColumn]
+                  curTable = {'title' : courseTitle,
+                              'hour'  : courseHour,
+                              'room'  : courseRoom,
+                              'day'   : data[dayLine][dayColumn],
+                              'datetime' : curCourseDate}
+                  myEdt.append(curTable)
+                  break
+        innerIterator += 1
+        if innerIterator >= len(data):
+          break
+      lineIterator = innerIterator
+  return sorted(myEdt, cmp=compare2)
 
