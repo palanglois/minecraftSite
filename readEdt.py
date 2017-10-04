@@ -2,13 +2,16 @@
 import csv
 import time
 import copy
-from cours import cours
+from coursList import coursList
 from sortList import *
 import dateparser
 from datetime import datetime
+import json
 
 #Parse the obtained csv file and get relevant courses for the person 'name'
-def getEdt(name):
+def getEdt(identifier):
+  with open('course_combinations.json', 'r') as comb:
+    cours = json.load(comb)[identifier]
   myEdt = []
   with open('/var/www/myServ/FlaskApp/static/edt.csv','r') as csvfile:
     reader = csv.reader(csvfile)
@@ -46,7 +49,7 @@ def getEdt(name):
               if curCourseDate < datetime.now().replace(hour=datetime.now().hour - 1):
                 continue
               courseTitle = data[innerIterator + 1][dayColumn]
-              for c in cours[name]:
+              for c in cours:
                 if c.decode('utf-8') in courseTitle.lower():
                   courseHour = data[innerIterator][dayColumn]
                   courseRoom = data[innerIterator + 3][dayColumn]
