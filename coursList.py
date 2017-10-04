@@ -7,7 +7,7 @@ coursList = {
               "minimiseurs": "Optimization and features of optimal solutions. Applications to imaging", 
               "recognition": "Object recognition and computer vision", 
               "pixel": "Sub-pixel image processing", 
-              "3D": "3D computer vision", 
+              "3d": "3D computer vision", 
               "differential": "The PDEs of image processing and their surprising applications", 
               "neurosciences": "Méthodes mathématiques pour les neurosciences", 
               "computational": "Computational statistics", 
