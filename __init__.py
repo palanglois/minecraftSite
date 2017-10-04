@@ -9,7 +9,7 @@ import os
 import csv
 import sys
 import json
-from readEdt import *
+from readEdt import parseEdt
 from getEdt import downloadEdt
 from coursList import coursList
 
@@ -29,13 +29,13 @@ class SimpleForm(FlaskForm):
 @app.route("/chaimaa")
 def chaimaaEdt():
   os.system("/var/www/myServ/FlaskApp/static/convertEdt.sh")
-  data = getEdt("Chaimaa")
+  data = parseEdt("Chaimaa")
   return(render_template('edt.html',**{'studentName' : u"Chaïmaa", 'listCours' : data}))
 
 @app.route("/othman")
 def othmanEdt():
   os.system("/var/www/myServ/FlaskApp/static/convertEdt.sh")
-  data = getEdt("Othman")
+  data = parseEdt("Othman")
   return(render_template('edt.html',**{'studentName' : "Othman", 'listCours' : data}))
 
 @app.route("/create_courses", methods=["GET"])
@@ -66,7 +66,7 @@ def paEdt():
   identifier = request.args.get('id')
   my_form = SimpleForm()
   downloadEdt()
-  data = getEdt(int(identifier))
+  data = parseEdt(int(identifier))
   return(render_template('edt.html', form=my_form, **{'listCours' : data}))
 
 @app.route("/robots.txt")

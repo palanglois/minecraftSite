@@ -9,7 +9,7 @@ from datetime import datetime
 import json
 
 #Parse the obtained csv file and get relevant courses for the person 'name'
-def getEdt(identifier):
+def parseEdt(identifier):
   with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
     cours = json.load(comb)[identifier]
   myEdt = []
