@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="/static/css/course_creator.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+{% from "_formhelpers.html" import render_field %}
+<form method=post>
+  {% for course in form.my_field %}
+    {{render_field(course)}}
+    <br/><br/>
+  {% endfor %}
+  <p><input type=submit value=Register>
+</form>
+
+</html>
