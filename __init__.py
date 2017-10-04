@@ -1,13 +1,30 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template_string, render_template, send_from_directory, request
+from flask_wtf import FlaskForm, widgets
+from flask_wtf.csrf import CSRFProtect
+from flask_appbuilder.widgets import ListWidget
+from wtforms.fields import SelectMultipleField
+from wtforms.widgets import CheckboxInput
 import os
 import csv
 import sys
 import json
 from readEdt import *
 from getEdt import downloadEdt
+from coursList import coursList
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
+app.secret_key = 's3cr3t'
+
+
+class MultiCheckboxField(SelectMultipleField):
+  widget = ListWidget(prefix_label=False)
+  option_widget = CheckboxInput()
+
+class SimpleForm(FlaskForm):
+  all_courses = [(k.decode('utf-8'), v.decode('utf-8')) for k, v in coursList.items()]
+  my_field = MultiCheckboxField('Cours choisis', choices=all_courses)
 
 @app.route("/chaimaa")
 def chaimaaEdt():
@@ -21,13 +38,36 @@ def othmanEdt():
   data = getEdt("Othman")
   return(render_template('edt.html',**{'studentName' : "Othman", 'listCours' : data}))
 
+@app.route("/create_courses", methods=["GET"])
+@csrf.exempt
+def createCourses():
+    my_form = SimpleForm()
+    return(render_template('course_creator.html', form=my_form))
+
+@app.route("/create_courses", methods=["POST"])
+@csrf.exempt
+def createCoursesPost():
+  my_form = SimpleForm()
+  if my_form.my_field.data is None: 
+    return(render_template('tes_con.html'))
+  data = None
+  with open('course_combinations.json', 'r') as comb:
+    data = json.load(comb)
+  with open('course_combinations.json', 'w') as comb:
+    data.append(my_form.my_field.data)
+    json.dump(data, comb)
+  comb_number = str(len(data)-1).zfill(6)
+  print("comb_number : ", comb_number)
+  url = 'http://lucienetleon.hopto.org/pa?id=' + comb_number
+  return(render_template('page_url.html', url=url))
+
 @app.route("/pa")
 def paEdt():
   identifier = request.args.get('id')
-  print(identifier)
+  my_form = SimpleForm()
   downloadEdt()
-  data = getEdt("PA")
-  return(render_template('edt.html',**{'studentName' : "PA", 'listCours' : data}))
+  data = getEdt(int(identifier))
+  return(render_template('edt.html', form=my_form, **{'listCours' : data}))
 
 @app.route("/robots.txt")
 def robots():
