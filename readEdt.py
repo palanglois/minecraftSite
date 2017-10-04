@@ -10,7 +10,7 @@ import json
 
 #Parse the obtained csv file and get relevant courses for the person 'name'
 def getEdt(identifier):
-  with open('course_combinations.json', 'r') as comb:
+  with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
     cours = json.load(comb)[identifier]
   myEdt = []
   with open('/var/www/myServ/FlaskApp/static/edt.csv','r') as csvfile:

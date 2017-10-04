@@ -51,9 +51,9 @@ def createCoursesPost():
   if my_form.my_field.data is None: 
     return(render_template('tes_con.html'))
   data = None
-  with open('course_combinations.json', 'r') as comb:
+  with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
     data = json.load(comb)
-  with open('course_combinations.json', 'w') as comb:
+  with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'w') as comb:
     data.append(my_form.my_field.data)
     json.dump(data, comb)
   comb_number = str(len(data)-1).zfill(6)
