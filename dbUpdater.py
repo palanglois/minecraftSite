@@ -81,9 +81,9 @@ def dl_parse_and_save_edt():
   data = parseEdt()
   pickle.dump(data,open( "/var/www/myServ/FlaskApp/static/parsedEdt.pkl", "wb" ))
   print('Update done.\n')
+  nb_minutes = 15.
+  threading.Timer(nb_minutes*60., dl_parse_and_save_edt).start()
 
 if __name__ == "__main__":
-  nb_minutes = 15.
-  threading.Timer(nb_minutes*60.0, dl_parse_and_save_edt).start()
   dl_parse_and_save_edt()
 
