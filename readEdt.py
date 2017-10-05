@@ -76,7 +76,11 @@ def parseEdt(identifier):
 
 def matchId(identifier):
   with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
-    user_courses = json.load(comb)[identifier]
+    all_user_courses = json.load(comb)
+    if identifier < len(all_user_courses):
+      user_courses = all_user_courses[identifier]
+    else:
+      return [], False
   all_courses = pickle.load(open("/var/www/myServ/FlaskApp/static/parsedEdt.pkl", "rb"))
   kept_courses = []
   for course in all_courses:
@@ -84,5 +88,5 @@ def matchId(identifier):
       if my_course.decode('utf-8') in course['title'].lower():
         kept_courses.append(course)
         break
-  return kept_courses
+  return kept_courses, True
 

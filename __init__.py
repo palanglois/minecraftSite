@@ -66,7 +66,9 @@ def createCoursesPost():
 def paEdt():
   identifier = request.args.get('id')
   my_form = SimpleForm()
-  data = matchId(int(identifier))
+  data, correct = matchId(int(identifier))
+  if not correct:
+    return(render_template('wrong_id.html'))
   last_update_time = datetime.datetime.fromtimestamp(os.path.getmtime('/var/www/myServ/FlaskApp/static/edt.csv')).strftime("%Y-%m-%d %H:%M:%S")
   return(render_template('edt.html', **{'listCours' : data, 'last_time' : last_update_time}))
 
