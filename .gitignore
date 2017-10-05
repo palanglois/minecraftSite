@@ -5,4 +5,5 @@ static/edt.xls
 static/edt.csv
 *.swp
 static/listPlayers.txt
-static/course_combinations.jso
+static/course_combinations.json
+static/parsedEdt.pkl

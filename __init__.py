@@ -9,7 +9,7 @@ import os
 import csv
 import sys
 import json
-from readEdt import parseEdt
+from readEdt import parseEdt, matchId
 from getEdt import downloadEdt
 from coursList import coursList
 
@@ -65,8 +65,8 @@ def createCoursesPost():
 def paEdt():
   identifier = request.args.get('id')
   my_form = SimpleForm()
-  downloadEdt()
-  data = parseEdt(int(identifier))
+  # downloadEdt()
+  data = matchId(int(identifier))
   return(render_template('edt.html', form=my_form, **{'listCours' : data}))
 
 @app.route("/robots.txt")

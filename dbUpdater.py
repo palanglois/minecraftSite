@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
+import json
 import csv
-import time
 import copy
-from coursList import coursList
 from sortList import *
 import dateparser
 from datetime import datetime
-import json
+import urllib
 import cPickle as pickle
+import threading
+
+
+#Function to download the csv file containing the schedule
+def downloadEdt():
+    urllib.urlretrieve("https://docs.google.com/spreadsheets/d/1yS1SKXenOvwjYRHxeAFPPsW9xgGPuBMjh0O4XBIyWHA/gviz/tq?tqx=out:csv", "/var/www/myServ/FlaskApp/static/edt.csv")
+
 
 #Parse the obtained csv file and get relevant courses for the person 'name'
-def parseEdt(identifier):
-  with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
-    cours = json.load(comb)[identifier]
+def parseEdt():
   myEdt = []
   with open('/var/www/myServ/FlaskApp/static/edt.csv','r') as csvfile:
     reader = csv.reader(csvfile)
@@ -50,39 +54,36 @@ def parseEdt(identifier):
               if curCourseDate < datetime.now().replace(hour=datetime.now().hour - 1):
                 continue
               courseTitle = data[innerIterator + 1][dayColumn]
-              for c in cours:
-                if c.decode('utf-8') in courseTitle.lower():
-                  courseHour = data[innerIterator][dayColumn]
-                  courseRoom = data[innerIterator + 3][dayColumn]
+              courseHour = data[innerIterator][dayColumn]
+              courseRoom = data[innerIterator + 3][dayColumn]
 
-                  # Fix for Laverne's mistakes
-                  if len(courseRoom) == 0:
-                    courseRoom = data[innerIterator + 4][dayColumn]
-                  if len(data[innerIterator + 2][dayColumn]) == 0:
-                    courseRoom = data[innerIterator + 4][dayColumn]
+              # Fix for Laverne's mistakes
+              if len(courseRoom) == 0:
+                courseRoom = data[innerIterator + 4][dayColumn]
+              if len(data[innerIterator + 2][dayColumn]) == 0:
+                courseRoom = data[innerIterator + 4][dayColumn]
 
-                  curTable = {'title' : courseTitle,
-                              'hour'  : courseHour,
-                              'room'  : courseRoom,
-                              'day'   : data[dayLine][dayColumn],
-                              'datetime' : curCourseDate}
-                  myEdt.append(curTable)
-                  break
+              curTable = {'title' : courseTitle,
+                          'hour'  : courseHour,
+                          'room'  : courseRoom,
+                          'day'   : data[dayLine][dayColumn],
+                          'datetime' : curCourseDate}
+              myEdt.append(curTable)
         innerIterator += 1
         if innerIterator >= len(data):
           break
       lineIterator = innerIterator
   return sorted(myEdt, cmp=compare2)
 
-def matchId(identifier):
-  with open('/var/www/myServ/FlaskApp/static/course_combinations.json', 'r') as comb:
-    user_courses = json.load(comb)[identifier]
-  all_courses = pickle.load(open("/var/www/myServ/FlaskApp/static/parsedEdt.pkl", "rb"))
-  kept_courses = []
-  for course in all_courses:
-    for my_course in user_courses:
-      if my_course.decode('utf-8') in course['title'].lower():
-        kept_courses.append(course)
-        break
-  return kept_courses
+def dl_parse_and_save_edt():
+  print('Starting update - %s' % datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+  downloadEdt()
+  data = parseEdt()
+  pickle.dump(data,open( "/var/www/myServ/FlaskApp/static/parsedEdt.pkl", "wb" ))
+  print('Update done.\n')
+
+if __name__ == "__main__":
+  nb_minutes = 15.
+  threading.Timer(nb_minutes*60.0, dl_parse_and_save_edt).start()
+  dl_parse_and_save_edt()
 
