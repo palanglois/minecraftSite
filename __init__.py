@@ -59,7 +59,7 @@ def createCoursesPost():
   comb_number = str(len(data)-1).zfill(6)
   print("comb_number : ", comb_number)
   url = 'http://lucienetleon.hopto.org/pa?id=' + comb_number
-  return(render_template('page_url.html', url=url))
+  return(render_template('page_url.html', url=url, comb_number=comb_number))
 
 @app.route("/pa")
 def paEdt():
