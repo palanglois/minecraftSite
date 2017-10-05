@@ -9,6 +9,7 @@ import os
 import csv
 import sys
 import json
+import datetime
 from readEdt import parseEdt, matchId
 from getEdt import downloadEdt
 from coursList import coursList
@@ -65,9 +66,9 @@ def createCoursesPost():
 def paEdt():
   identifier = request.args.get('id')
   my_form = SimpleForm()
-  # downloadEdt()
   data = matchId(int(identifier))
-  return(render_template('edt.html', form=my_form, **{'listCours' : data}))
+  last_update_time = datetime.datetime.fromtimestamp(os.path.getmtime('/var/www/myServ/FlaskApp/static/edt.csv')).strftime("%Y-%m-%d %H:%M:%S")
+  return(render_template('edt.html', **{'listCours' : data, 'last_time' : last_update_time}))
 
 @app.route("/robots.txt")
 def robots():
